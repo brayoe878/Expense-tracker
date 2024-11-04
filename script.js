@@ -13,6 +13,7 @@ class ExpenseTracker {
         this.initializeEventListeners();
         this.updateDisplay();
         this.initializeChart();
+        this.initializeTouchEvents();
     }
 
     initializeEventListeners() {
@@ -151,6 +152,34 @@ class ExpenseTracker {
         this.updateDisplay();
         this.updateChart();
         showToast('Transaction deleted');
+    }
+
+    initializeTouchEvents() {
+        let touchStartX = 0;
+        let touchEndX = 0;
+        
+        this.transactionList.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, false);
+        
+        this.transactionList.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            this.handleSwipe(e.target.closest('.transaction-item'), touchStartX, touchEndX);
+        }, false);
+    }
+
+    handleSwipe(element, startX, endX) {
+        const swipeThreshold = 100;
+        const diff = startX - endX;
+        
+        if (element && Math.abs(diff) > swipeThreshold) {
+            if (diff > 0) { // Swipe left
+                const deleteBtn = element.querySelector('.delete-btn');
+                if (deleteBtn) {
+                    deleteBtn.click();
+                }
+            }
+        }
     }
 }
 
