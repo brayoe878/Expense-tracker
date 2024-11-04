@@ -88,27 +88,45 @@ class ExpenseTracker {
     }
 
     updateTransactionList() {
-        this.transactionList.innerHTML = '';
+        const existingTransactions = Array.from(this.transactionList.children);
+        
         this.transactions
             .sort((a, b) => new Date(b.date) - new Date(a.date))
-            .forEach(transaction => {
-                const li = document.createElement('li');
-                li.className = `transaction-item ${transaction.type}-item`;
-                li.innerHTML = `
-                    <div>
-                        <strong>${transaction.description}</strong>
-                        <small>${transaction.date} | ${transaction.category}</small>
-                    </div>
-                    <span>${formatCurrency(transaction.amount)}</span>
-                    <button class="delete-btn" data-id="${transaction.id}">×</button>
-                `;
+            .forEach((transaction, index) => {
+                const existingItem = existingTransactions.find(
+                    item => item.dataset.id === transaction.id.toString()
+                );
                 
-                li.querySelector('.delete-btn').addEventListener('click', () => {
-                    this.deleteTransaction(transaction.id);
-                });
-                
-                this.transactionList.appendChild(li);
+                if (!existingItem) {
+                    const li = document.createElement('li');
+                    li.className = `transaction-item ${transaction.type}-item`;
+                    li.dataset.id = transaction.id;
+                    li.innerHTML = `
+                        <div>
+                            <strong>${transaction.description}</strong>
+                            <small>${transaction.date} | ${transaction.category}</small>
+                        </div>
+                        <span>${formatCurrency(transaction.amount)}</span>
+                        <button class="delete-btn" data-id="${transaction.id}">×</button>
+                    `;
+                    
+                    li.querySelector('.delete-btn').addEventListener('click', () => {
+                        this.deleteTransaction(transaction.id);
+                    });
+                    
+                    if (index === 0) {
+                        this.transactionList.insertBefore(li, this.transactionList.firstChild);
+                    } else {
+                        this.transactionList.appendChild(li);
+                    }
+                }
             });
+        
+        existingTransactions.forEach(item => {
+            if (!this.transactions.find(t => t.id.toString() === item.dataset.id)) {
+                item.remove();
+            }
+        });
     }
 
     updateSummary() {
