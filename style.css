@@ -9,19 +9,41 @@
 }
 
 body {
-    background: linear-gradient(120deg, #f6f8f9, #e9ecef);
+    margin: 0;
+    padding: 0;
     min-height: 100vh;
+    background-image: url('./images/your-background-image.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    position: relative;
+}
+
+/* Add overlay for better readability */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.9); /* white overlay */
+    z-index: -1;
 }
 
 .container {
-    background-color: white;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.95);
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-    border-radius: 15px;
-    padding: 2rem;
 }
 
 .balance-container {
-    background: linear-gradient(120deg, var(--primary-color), #27ae60);
+    margin: 0;
+    padding: 1rem;
+    background: linear-gradient(120deg, rgba(46, 204, 113, 0.9), rgba(39, 174, 96, 0.9));
     color: white;
     padding: 2rem;
     border-radius: 10px;
@@ -29,7 +51,30 @@ body {
 }
 
 .summary {
-    margin-top: -1rem;
+    margin: 0;
+    padding: 1rem 0;
+    gap: 0.5rem;
+}
+
+.transaction-container {
+    margin: 0;
+}
+
+#transaction-list {
+    margin: 0;
+    padding: 0;
+}
+
+.transaction-item {
+    margin: 0;
+    border-bottom: 1px solid #eee;
+    padding: 0.75rem;
+    transition: background-color 0.3s ease;
+}
+
+.transaction-item:hover {
+    background-color: #f8f9fa;
+    transform: none;
 }
 
 .income, .expenses {
@@ -40,17 +85,6 @@ body {
 
 .income:hover, .expenses:hover {
     transform: translateY(-5px);
-}
-
-.transaction-item {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    position: relative;
-    overflow: hidden;
-}
-
-.transaction-item:hover {
-    transform: translateX(5px);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .transaction-item .delete-btn {
@@ -84,6 +118,9 @@ body {
 .form-container {
     position: relative;
     overflow: hidden;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.9);
+    border-bottom: 1px solid #eee;
 }
 
 .form-container::before {
@@ -315,4 +352,33 @@ input, select, button {
     .container {
         box-shadow: none;
     }
+}
+
+/* Animation for new transactions */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.transaction-item {
+    animation: slideIn 0.3s ease forwards;
+}
+
+/* Make form inputs more compact */
+input, select, button {
+    padding: 0.5rem;
+    margin: 0;
+}
+
+/* Update balance container */
+.balance-container {
+    margin: 0;
+    padding: 1rem;
+    background: linear-gradient(120deg, rgba(46, 204, 113, 0.9), rgba(39, 174, 96, 0.9));
 }
